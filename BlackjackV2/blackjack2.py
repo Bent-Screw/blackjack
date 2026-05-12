@@ -1,14 +1,6 @@
 import random, time
 from ascii_cards_main.ascii_cards.cards import ascii_kortlek, baksida
 
-loop = True
-
-def skapa_kortlek():
-    # Spakar ny, blandad kortlek
-    kortlek = list(ny_kortlek)
-    random.shuffle(kortlek)
-    return kortlek
-
 def bet(saldo):
     while True:
         try:
@@ -24,14 +16,14 @@ def bet(saldo):
             time.sleep(2.5)
 
         elif int(bet) < 1:
-            print('försök inte änns, det fungerar inte')
+            print('Ett sätt att få oändligt med pengar... innan jag tänkte samma sak')
             time.sleep(2.5)
 
         elif int(bet) <= int(saldo):
             with open('saldo.txt', 'w') as file:
                 file.write(f'{int(saldo) - int(bet)}')
-            return bet
-            break
+            return int(bet)
+
 
 def banner(clearTop):
 
@@ -107,17 +99,6 @@ def kort_värde(hand):
 
     return värde
 
-# def spelplan(delare_kort, spelare_kort, delarvärde, spelarvärde):
-#     banner(True)
-#     horisontellaKort(delare_kort)
-#     print(f'kortvärde:{kort_värde(delare_kort)}')
-#     print('\n')
-#     horisontellaKort(spelare_kort)
-#     print(f'kortvärde:{kort_värde(spelare_kort)}')
-#     print('\n')
-
-
-
 
 saldo = 0
 # Läs in saldo från fil eller initiera om det är tomt
@@ -142,6 +123,12 @@ while True:
 
     with open('saldo.txt', 'r') as file:
         saldo = int(file.read())
+    
+    # Återställ saldot till 100 om det är 0 eller mindre
+    if saldo <= 0:
+        with open('saldo.txt', 'w') as file:
+            file.write('100')
+        saldo = 100
 
     if sida == 'meny':
         menu = input('\n'*30 + f'''
@@ -150,26 +137,52 @@ while True:
         
         1) spela
         2) regler
+        3) avsluta programmet
+        
+
+
+
 
         input:  ''')
+        print('\n'*20)
         if menu == '1':
             sida = 'bet'
             continue
         elif menu == '2':
             sida = 'regler'
+
+        elif menu == '3':
+            print('''
+——————Inga Pengar kvar?———————
+⠀⣞⢽⢪⢣⢣⢣⢫⡺⡵⣝⡮⣗⢷⢽⢽⢽⣮⡷⡽⣜⣜⢮⢺⣜⢷⢽⢝⡽⣝
+⠸⡸⠜⠕⠕⠁⢁⢇⢏⢽⢺⣪⡳⡝⣎⣏⢯⢞⡿⣟⣷⣳⢯⡷⣽⢽⢯⣳⣫⠇
+⠀⠀⢀⢀⢄⢬⢪⡪⡎⣆⡈⠚⠜⠕⠇⠗⠝⢕⢯⢫⣞⣯⣿⣻⡽⣏⢗⣗⠏⠀
+⠀⠪⡪⡪⣪⢪⢺⢸⢢⢓⢆⢤⢀⠀⠀⠀⠀⠈⢊⢞⡾⣿⡯⣏⢮⠷⠁⠀⠀
+⠀⠀⠀⠈⠊⠆⡃⠕⢕⢇⢇⢇⢇⢇⢏⢎⢎⢆⢄⠀⢑⣽⣿⢝⠲⠉⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⡿⠂⠠⠀⡇⢇⠕⢈⣀⠀⠁⠡⠣⡣⡫⣂⣿⠯⢪⠰⠂⠀⠀⠀⠀
+⠀⠀⠀⠀⡦⡙⡂⢀⢤⢣⠣⡈⣾⡃⠠⠄⠀⡄⢱⣌⣶⢏⢊⠂⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢝⡲⣜⡮⡏⢎⢌⢂⠙⠢⠐⢀⢘⢵⣽⣿⡿⠁⠁⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠨⣺⡺⡕⡕⡱⡑⡆⡕⡅⡕⡜⡼⢽⡻⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣼⣳⣫⣾⣵⣗⡵⡱⡡⢣⢑⢕⢜⢕⡝⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣴⣿⣾⣿⣿⣿⡿⡽⡑⢌⠪⡢⡣⣣⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⡟⡾⣿⢿⢿⢵⣽⣾⣼⣘⢸⢸⣞⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠁⠇⠡⠩⡫⢿⣝⡻⡮⣒⢽⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+—————————————————————————————''')
+            break
         else:
             print('sidan finns inte, försök igen')
-            time.sleep(4)
+            time.sleep(3.5)
 
     elif sida == 'regler':
-            input('regler är tråkiga, gå till typ wikihow eller nått om du vill veta hur spelet fungerar. skriv vad som helst för att gå till menyn: ')
+            input('Gå till typ wikihow eller nått om du vill veta hur spelet fungerar. skriv vad som helst för att gå till menyn: ')
             sida = 'meny'
             continue
-    
+
+
     elif sida == 'bet':
         banner(False)
-        print('\n'*6)
-        bet(saldo)
+        print('\n'*8)
+        satsning = bet(saldo)
         
         kortlek = random.sample(ascii_kortlek, len(ascii_kortlek))
 
@@ -211,10 +224,9 @@ while True:
             
             if spelarvärde > 21:
                 print('Du har gått över, womp womp')
-                time.sleep(2)
-                break
+                time.sleep(3.5)
                 sida = 'meny'
-                continue
+                break
 
             elif spelarvärde == 21:
                 print('Blackjack!')
@@ -231,6 +243,8 @@ while True:
                 sida = 'delarens tur'
                 break
 
+        continue
+
     elif sida == 'delarens tur':
 
         banner(True)
@@ -239,73 +253,66 @@ while True:
         print('\n')
         horisontellaKort(spelare_kort)
         print(f'kortvärde:{kort_värde(spelare_kort)}')
-        print('\n')
+        print('\n'*3)
 
 
 
         while True:
 
-            time.sleep(1)
+            time.sleep(2)
+                    # Vinstvillkor    
+            # Lägg till nytt kort först (om dealern behöver det)
+            if kort_värde(delare_kort) < 17:
+                delare_kort.append(kortlek.pop())
 
             delarvärde = kort_värde(delare_kort)
             prel_delarvärde = kort_värde(delare_kort)
             spelarvärde = kort_värde(spelare_kort)
             
-            # Vinstvillkor
+            # Visa korten INNAN vi kollar vinstvillkoren
+            banner(True)
+            horisontellaKort(delare_kort)
+            print(f'kortvärde:{kort_värde(delare_kort)}')
+            print('\n')
+            horisontellaKort(spelare_kort)
+            print(f'kortvärde:{kort_värde(spelare_kort)}')
+            print('\n'*3)
+            
+
             
             if delarvärde > 21:
                 print('delaren gick över, du vann!')
                 with open('saldo.txt', 'w') as file:
-                    file.write(f'{bet*2}')
+                    file.write(str(saldo + satsning*2))
                 sida = 'meny'
+                time.sleep(3.5)
                 break
 
             elif delarvärde == 21 and delarvärde > spelarvärde:
                 print('Delaren fick Blackjack!, du förlorade')
                 sida = 'meny'
+                time.sleep(3.5)
                 break
 
             elif delarvärde > spelarvärde:
                 print('delaren vann, du får hoppas på mer tur nästa gång')
                 sida = 'meny'
-                time.sleep(2)
+                time.sleep(3.5)
                 break
 
             elif delarvärde == spelarvärde:
                 print('det blev lika, du får pengarna tillbaka')
                 sida = 'meny'
-                time.sleep(2)
                 with open('saldo.txt', 'w') as file:
-                    file.write(f'{bet}')
+                    file.write(str(saldo + satsning))
+                time.sleep(3.5)
                 break
 
             elif delarvärde < spelarvärde: 
                 print('du fick högre än delaren, du vann!')
                 with open('saldo.txt', 'w') as file:
-                    file.write(f'{bet*2}')
+                    file.write(str(saldo + satsning*2))
+                sida = 'meny'
+                break
 
-
-
-            banner(True)
-            horisontellaKort(delarens_kort)
-            print(f'kortvärde:{kort_värde(_delarens_kort)}')
-            print('\n')
-            horisontellaKort(spelare_kort)
-            print(f'kortvärde:{kort_värde(spelare_kort)}')
-            print('\n')
-            
-            delare_kort.append(kortlek.pop())
-
-            
-        # print('weeler dealer')
-
-
-    elif sida == 'game over':
-        # Update the player's balance, display the result, and ask if they want to play again or quit.
-        pass
-
-        with open('saldo.txt', 'r') as file:
-            saldo = int(file.read())
-    
-        with open('saldo.txt', 'w') as file:
-            file.write('100')
+        continue
